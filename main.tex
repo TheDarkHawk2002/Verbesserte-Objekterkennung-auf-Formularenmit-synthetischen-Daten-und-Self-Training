@@ -41,7 +41,8 @@
 \newcommand{\takeaway}[1]{\vspace{0.35em}\begin{center}\textbf{#1}\end{center}}
 \newcommand{\experimentquestion}[1]{\vspace{-0.15em}{\normalsize\textcolor{blueaccent}{\textbf{Fragestellung:} #1}}\vspace{0.45em}}
 
-\title{Verbesserte Objekterkennung auf Formularen\\mit synthetischen Daten und Self-Training}
+\title{Improved Object Detection on Forms\\
+using Synthetic Data and Self-Training}
 \author{Okan Yakin}
 \institute{Technische Universität Dortmund}
 \date{Abschlusspräsentation der Bachelorarbeit}
@@ -311,31 +312,22 @@
 \takeaway{Reale Daten werden nutzbar, ohne für jede Seite neue manuelle Bounding Boxes zu zeichnen.}
 \end{frame}
 
-% 12
-\begin{frame}{ASTOD}
+\begin{frame}{ASTOD: Originalmethode}
 \begin{center}
-\begin{tikzpicture}[>=Stealth,node distance=0.34cm,font=\scriptsize]
-  \node[draw,rounded corners,fill=white,align=center,minimum width=2.2cm,minimum height=1.05cm] (a) {1. Teacher\\auf Labeled\\Data trainieren};
-  \node[draw,rounded corners,fill=white,align=center,right=of a,minimum width=2.2cm,minimum height=1.05cm] (b) {2. Multi-View\\Predictions auf\\realen Seiten};
-  \node[draw,rounded corners,fill=white,align=center,right=of b,minimum width=2.2cm,minimum height=1.05cm] (c) {3. NMS und\\Adaptive\\Threshold};
-  \node[draw,rounded corners,fill=white,align=center,right=of c,minimum width=2.2cm,minimum height=1.05cm] (d) {4. Student auf\\Labeled +\\Pseudo-Labeled Data};
-  \node[draw,rounded corners,fill=softgreen,align=center,right=of d,minimum width=2.2cm,minimum height=1.05cm] (e) {5. Refinement\\nur mit\\Labeled Data};
-  \draw[->,thick] (a)--(b);
-  \draw[->,thick] (b)--(c);
-  \draw[->,thick] (c)--(d);
-  \draw[->,thick] (d)--(e);
-  \draw[->,thick,greenaccent] (e.south) .. controls +(0,-1.0) and +(0,-1.0) .. node[below,font=\scriptsize]{verfeinerter Student ersetzt den Teacher} (a.south);
-\end{tikzpicture}
+\includegraphics[width=0.68\linewidth]{assets/astod_loop_full_steps.png}
 \end{center}
 
-\vspace{0.75em}
-\begin{itemize}
-  \item Mehrere Ansichten: Original, Spiegelung, Vergrößerung sowie Spiegelung + Vergrößerung.
-  \item Predictions werden zurücktransformiert und mit NMS zusammengeführt.
-  \item Der Adaptive Threshold wird aus dem Histogramm der Confidence Scores bestimmt.
-  \item Unsichere Pseudo-Labels erhalten im Loss ein geringeres Gewicht.
+\vspace{-0.35em}
+
+\begin{itemize}\scriptsize
+  \item Zuerst wird ein Teacher auf gelabelten Daten trainiert.
+  \item Der Teacher erzeugt Predictions für mehrere Ansichten der ungelabelten Bilder, beispielsweise gespiegelt oder vergrößert.
+  \item Die Predictions werden zurücktransformiert und mit NMS zu gemeinsamen Boxen zusammengeführt.
+  \item Ein adaptiver Confidence Threshold aus dem Score-Histogramm filtert unsichere Pseudo-Labels.
+  \item Der Student lernt aus gelabelten und gewichteten pseudo-gelabelten Daten; nach Refinement wird Student zu Teacher.
 \end{itemize}
-\sourcefootnote{ASTOD [4].}
+
+\sourcefootnote{ASTOD-Pipeline nach Vandeghen et al. [4].}
 \end{frame}
 
 % 13
