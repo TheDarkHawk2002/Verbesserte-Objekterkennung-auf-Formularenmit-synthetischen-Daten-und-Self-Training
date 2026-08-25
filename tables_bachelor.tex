@@ -1,0 +1,85 @@
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\newcommand{\EvaluationTable}{%
+\begin{tabular}{L{0.28\textwidth}L{0.60\textwidth}}
+\toprule
+\textbf{Kennzahl} & \textbf{Bedeutung} \\
+\midrule
+Precision & Anteil der Predictions, die richtig sind \\
+Recall & Anteil der Ground Truth Bounding Boxes, die gefunden werden \\
+F1 & harmonisches Mittel aus Precision und Recall \\
+\bottomrule
+\end{tabular}}
+
+\newcommand{\SetupTable}{%
+\begin{tabular}{L{0.30\textwidth}L{0.58\textwidth}}
+\toprule
+\textbf{Komponente} & \textbf{Einstellung} \\
+\midrule
+Detektor & Faster R-CNN mit ResNet-50-FPN \\
+Erkennungsklasse & \texttt{text}; Hintergrund wird intern behandelt \\
+Optimizer & SGD \\
+Evaluation & Precision, Recall und F1 bei IoU $=0{,}5$ \\
+Initial Teacher & auf synthetischen Seiten trainiert \\
+Self-Training & synthetische Ground Truth + reale Pseudo-Labels \\
+\bottomrule
+\end{tabular}}
+
+\newcommand{\BaselineTable}{%
+\begin{tabular}{L{0.42\textwidth}C{0.16\textwidth}C{0.16\textwidth}C{0.16\textwidth}}
+\toprule
+\textbf{Trainingsdaten} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+\midrule
+nur synthetische Daten & 0{,}65 & 0{,}76 & 0{,}70 \\
+nur reale Annotationen & 0{,}78 & 0{,}83 & 0{,}80 \\
+\bottomrule
+\end{tabular}}
+
+\newcommand{\GenerationTable}{%
+\begin{tabular}{L{0.37\textwidth}C{0.18\textwidth}L{0.36\textwidth}}
+\toprule
+\textbf{Verfahren} & \textbf{F1} & \textbf{Einordnung} \\
+\midrule
+rekonstruierter Hintergrund / direktes Einfügen & 0{,}76 & erhält den Kontext des Scans \\
+weißer Hintergrund & 0{,}75 & einfacher, erzeugt aber auffällige weiße Flächen \\
+\bottomrule
+\end{tabular}}
+
+\newcommand{\SyntheticAmountTable}{%
+\begin{tabular}{C{0.22\textwidth}C{0.18\textwidth}L{0.44\textwidth}}
+\toprule
+\textbf{Synthetischer Anteil} & \textbf{F1} & \textbf{Ergebnis} \\
+\midrule
+10\% & 0{,}72 & Self-Training liefert weiterhin einen Nutzen \\
+25\% & 0{,}75 & bereits nahe an längeren Läufen mit allen Daten \\
+100\% & 0{,}77 & stärkstes Ergebnis im langen Lauf \\
+\bottomrule
+\end{tabular}}
+
+\newcommand{\AnchorTable}{%
+\begin{tabular}{C{0.18\textwidth}C{0.25\textwidth}C{0.25\textwidth}C{0.18\textwidth}}
+\toprule
+\textbf{Checkpoint} &
+\textbf{Regular F1} &
+\textbf{Pseudo-only F1} &
+\textbf{Differenz} \\
+\midrule
+81 & 0{,}7726 & 0{,}7680 & -0{,}0045 \\
+56 & 0{,}7710 & 0{,}7633 & -0{,}0077 \\
+77 & 0{,}7709 & 0{,}7595 & -0{,}0114 \\
+75 & 0{,}7708 & 0{,}7601 & -0{,}0107 \\
+78 & 0{,}7698 & 0{,}7548 & -0{,}0150 \\
+\bottomrule
+\end{tabular}}
+
+\newcommand{\RealSupervisionTable}{%
+\begin{tabular}{L{0.58\textwidth}C{0.22\textwidth}}
+\toprule
+\textbf{Trainingsstrategie} & \textbf{F1} \\
+\midrule
+nur reale Annotationen & 0{,}8011 \\
+reale + synthetische Daten im direkten Training & 0{,}8007 \\
+reale + synthetische Daten über Self-Training & \textbf{0{,}8144} \\
+\bottomrule
+\end{tabular}}

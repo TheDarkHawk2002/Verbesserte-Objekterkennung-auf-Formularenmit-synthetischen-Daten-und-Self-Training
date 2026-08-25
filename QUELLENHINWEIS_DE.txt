@@ -1,0 +1,25 @@
+Zentrale fachliche Quellen
+
+[1] G. Jaume, H. K. Ekenel und J.-P. Thiran,
+    "FUNSD: A Dataset for Form Understanding in Noisy Scanned Documents",
+    ICDAR Workshops, 2019.
+
+[2] A. W. Harley, A. Ufkes und K. G. Derpanis,
+    "Evaluation of Deep Convolutional Nets for Document Image Classification and Retrieval",
+    ICDAR, 2015.
+
+[3] S. Ren, K. He, R. Girshick und J. Sun,
+    "Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks",
+    IEEE TPAMI, 2017.
+
+[4] R. Vandeghen et al.,
+    "Adaptive Self-Training for Object Detection",
+    ICCV Workshops, 2023.
+
+[5] T. Yu et al.,
+    "Inpaint Anything: Segment Anything Meets Image Inpainting",
+    arXiv:2304.06790, 2023.
+
+Die sichtbaren Kurzverweise in der Präsentation entsprechen diesen Nummern.
+Die Originalpaper zu ASTOD und Faster R-CNN liegen zusätzlich im Unterordner "quellen".
+Die RPN-Abbildung auf Folie 9 ist ein Ausschnitt aus Figure 3 des Faster-R-CNN-Papers.
