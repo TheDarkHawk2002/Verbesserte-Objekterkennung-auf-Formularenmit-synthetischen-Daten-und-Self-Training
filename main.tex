@@ -246,7 +246,6 @@ using Synthetic Data and Self-Training}
 \shortnote{Ren et al. [3], Fig. 3 (Ausschnitt; Paper-Konfiguration).}
 
 \column{0.49\textwidth}
-\textbf{Die Grafik wird von unten nach oben gelesen.}
 \vspace{0.25em}
 \begin{enumerate}\small
   \item \textbf{Feature Map und Sliding Window}\\
@@ -261,7 +260,6 @@ using Synthetic Data and Self-Training}
   Hohe Scores bleiben; NMS entfernt stark überlappende Proposals.
 \end{enumerate}
 \end{columns}
-\takeaway{Das RPN erzeugt Kandidatenboxen; die endgültige Klassenentscheidung folgt im Detection Head.}
 \end{frame}
 
 % 10
@@ -277,7 +275,7 @@ using Synthetic Data and Self-Training}
   \draw[thick,greenaccent] (1.0,0.45) rectangle (3.8,2.0);
   \fill[gray,opacity=0.25] (1.0,0.45) rectangle (2.8,1.55);
   \node[blueaccent] at (1.4,-0.25) {\small Prediction};
-  \node[greenaccent] at (2.9,2.25) {\small Ground Truth};
+  \node[greenaccent] at (2.9,2.25) {\small Annotation};
   \node at (1.9,1.0) {\small Intersection};
   \node[align=center] at (6.4,1.0) {\small
     IoU $=$ $\dfrac{\text{Intersection Area}}{\text{Union Area}}$\\[0.35em]
@@ -306,13 +304,13 @@ using Synthetic Data and Self-Training}
 \vspace{0.55em}
 \begin{itemize}
   \item Der Teacher erzeugt Pseudo-Labels für reale, nicht annotierte Seiten.
-  \item Der Student lernt aus synthetischen Seiten mit Ground Truth und realen Seiten mit Pseudo-Labels.
+  \item Der Student lernt aus synthetischen Seiten mit Annotation und realen Seiten mit Pseudo-Labels.
   \item Die ursprünglichen synthetischen Daten bleiben in jeder regulären Runde erhalten.
 \end{itemize}
 \takeaway{Reale Daten werden nutzbar, ohne für jede Seite neue manuelle Bounding Boxes zu zeichnen.}
 \end{frame}
 
-\begin{frame}{ASTOD: Originalmethode}
+\begin{frame}{ASTOD: Adaptive Self-Training for Object Detection}
 \begin{center}
 \includegraphics[width=0.68\linewidth]{assets/astod_loop_full_steps.png}
 \end{center}
@@ -320,7 +318,6 @@ using Synthetic Data and Self-Training}
 \vspace{-0.35em}
 
 \begin{itemize}\scriptsize
-  \item Zuerst wird ein Teacher auf gelabelten Daten trainiert.
   \item Der Teacher erzeugt Predictions für mehrere Ansichten der ungelabelten Bilder, beispielsweise gespiegelt oder vergrößert.
   \item Die Predictions werden zurücktransformiert und mit NMS zu gemeinsamen Boxen zusammengeführt.
   \item Ein adaptiver Confidence Threshold aus dem Score-Histogramm filtert unsichere Pseudo-Labels.
@@ -336,12 +333,12 @@ using Synthetic Data and Self-Training}
 \column{0.55\textwidth}
 \begin{center}
 \begin{tikzpicture}[>=Stealth,node distance=0.45cm,font=\scriptsize,scale=0.97,transform shape]
-  \node[draw,rounded corners,fill=softblue,align=center,minimum width=3.8cm,minimum height=0.72cm] (s) {synthetische Seiten + Ground Truth};
+  \node[draw,rounded corners,fill=softblue,align=center,minimum width=3.8cm,minimum height=0.72cm] (s) {synthetische Seiten + Annotation};
   \node[draw,rounded corners,fill=white,below=of s,minimum width=2.2cm,minimum height=0.65cm] (t) {Teacher};
   \node[draw,rounded corners,fill=white,below=of t,align=center,minimum width=3.8cm,minimum height=0.72cm] (r) {reale Seiten ohne Boxen};
   \node[draw,rounded corners,fill=white,below=of r,align=center,minimum width=3.8cm,minimum height=0.72cm] (p) {gefilterte Pseudo-Labels};
-  \node[draw,rounded corners,fill=softgreen,below=of p,align=center,minimum width=4.6cm,minimum height=0.72cm] (u) {Student: synthetische Ground Truth + reale Pseudo-Labels};
-  \node[draw,rounded corners,fill=white,below=of u,align=center,minimum width=4.6cm,minimum height=0.72cm] (f) {Refinement: nur synthetische Ground Truth};
+  \node[draw,rounded corners,fill=softgreen,below=of p,align=center,minimum width=4.6cm,minimum height=0.72cm] (u) {Student: synthetische Seiten und reale Seiten Pseudo-Labeld};
+  \node[draw,rounded corners,fill=white,below=of u,align=center,minimum width=4.6cm,minimum height=0.72cm] (f) {Refinement: nur synthetische Annotation};
   \draw[->,thick] (s)--(t);
   \draw[->,thick] (t)--(r);
   \draw[->,thick] (r)--(p);
@@ -354,7 +351,7 @@ using Synthetic Data and Self-Training}
 \column{0.40\textwidth}
 \textbf{Zuordnung in dieser Arbeit}
 \begin{itemize}
-  \item Labeled Data $\rightarrow$ synthetische Seiten mit Ground Truth
+  \item Labeled Data $\rightarrow$ synthetische Seiten mit Annotation
   \item Unlabeled Data $\rightarrow$ reale FUNSD-Trainingsseiten
   \item Student $\rightarrow$ beide Datengruppen
   \item Refinement $\rightarrow$ erneut nur synthetische Daten
@@ -374,7 +371,6 @@ using Synthetic Data and Self-Training}
 \begin{center}
 \SetupTable
 \end{center}
-\takeaway{Detektor und Auswertung bleiben in den Hauptvergleichen gleich; verändert wird die Trainingsstrategie.}
 \end{frame}
 
 % 15
@@ -509,7 +505,7 @@ Fünf starke Checkpoints aus dem Plateau werden auf zwei Arten verglichen:
 \RealSupervisionTable
 \end{center}
 \vspace{0.55em}
-\takeaway{Direktes Mischen liefert keinen Gewinn; die Einbindung über Self-Training verbessert F1 hierf.}
+\takeaway{Direktes Mischen liefert keinen Gewinn; die Einbindung über Self-Training verbessert F1 hier.}
 \end{frame}
 
 % 23
@@ -530,7 +526,7 @@ Fünf starke Checkpoints aus dem Plateau werden auf zwei Arten verglichen:
   \item Wiederverwendung annotierter Ausgangslayouts für synthetische Seiten
   \item begrenzte Variation bei Schriftarten und Handschrift
   \item keine Mittelung über mehrere unabhängige Zufallsinitialisierungen
-  \item kein eigener Validierungssatz für die Modellauswahl
+  \item kein eigener Validierungssatz
 \end{itemize}
 \end{frame}
 
@@ -540,7 +536,7 @@ Fünf starke Checkpoints aus dem Plateau werden auf zwei Arten verglichen:
 \begin{itemize}
   \item Synthetische Daten bilden einen brauchbaren automatischen Ausgangspunkt.
   \item Self-Training nutzt reale Seiten ohne zusätzliche manuelle Boxen.
-  \item Die synthetische Ground Truth stabilisiert die wiederholten Trainingsrunden.
+  \item Die synthetische Annotation stabilisiert die wiederholten Trainingsrunden.
   \item Reale Annotationen liefern weiterhin die stärkste Aufsicht.
 \end{itemize}
 
